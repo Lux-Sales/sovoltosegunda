@@ -1,0 +1,52 @@
+version: "3"
+services:
+  sovoltosegunda_postgres:
+    image: postgres:latest
+    container_name: sovoltosegunda_postgres
+    networks:
+      - sovoltosegunda_network
+    environment: 
+      - POSTGRES_NAME=so_volto_segunda
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_USER=api_user
+      - POSTGRES_DB=so_volto_segunda
+      - POSTGRES_HOST=sovoltosegunda_postgres
+      - DEBUG=True
+
+  sovoltosegunda_api:
+    build: .
+    container_name: sovoltosegunda_api
+    networks: 
+      - sovoltosegunda_network
+    ports:
+      - "8000:8000"
+    depends_on: 
+      - sovoltosegunda_postgres
+    environment: 
+      - ENVIRONMENT=DEVELOPMENT
+      - POSTGRES_NAME=so_volto_segunda
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_USER=api_user
+      - POSTGRES_DB=so_volto_segunda
+      - POSTGRES_HOST=sovoltosegunda_postgres
+      - SECRET_KEY=chavealeatoria
+      - DEBUG=True
+
+  sovoltosegunda_pgadmin:
+    image: dpage/pgadmin4
+    container_name: sovoltosegunda_pgadmin
+    ports: 
+      - "5433:80"
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=sales_l@hotmail.com
+      - PGADMIN_DEFAULT_PASSWORD=adminpswd
+    # volumes: 
+    #   - ./.ignore/var/lib/pgadmin:/var/lib/pgadmin
+    networks:
+      - sovoltosegunda_network
+    logging: 
+      driver: none      
+
+networks: 
+  sovoltosegunda_network:
+    driver: bridge  
