@@ -15,7 +15,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from users.views import RegisterUserViewSet
+from rest_framework import routers
+from django.conf.urls import include
+
+router = routers.DefaultRouter() 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', include(router.urls)),
+    path('users/', RegisterUserViewSet.as_view()),
 ]

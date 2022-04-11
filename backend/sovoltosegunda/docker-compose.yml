@@ -3,6 +3,8 @@ services:
   sovoltosegunda_postgres:
     image: postgres:latest
     container_name: sovoltosegunda_postgres
+    volumes:
+      - ./.ignore/postgres/postgres:/var/lib/postgresql/data
     networks:
       - sovoltosegunda_network
     environment: 
@@ -20,6 +22,8 @@ services:
       - sovoltosegunda_network
     ports:
       - "8000:8000"
+    volumes:
+      - .:/code
     depends_on: 
       - sovoltosegunda_postgres
     environment: 
